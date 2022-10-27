@@ -22,6 +22,8 @@ We have a basic idea of these tech stack while we will learn more about it as th
 
 The following diagram shows the flow of the application that we hope to build
 
+<img width="942" alt="Screenshot 2022-10-27 at 7 49 59 PM" src="https://user-images.githubusercontent.com/77240047/198311983-fcd83434-e1fe-4d57-8b5a-4dd46656c8dc.png">
+
 ### Our team
 
 Our team for this software engineering project has the following members
