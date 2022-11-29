@@ -63,7 +63,7 @@ fun EventScreen(navController: NavController, dateString: String) {
                 EventForm(navController, dateString)
             }
             else {
-                EventDetails(event = Gson().fromJson(eventString, Event::class.java))
+                EventDetails(event = Gson().fromJson(eventString, Event::class.java), navController)
             }
         }
     }
@@ -76,7 +76,39 @@ fun EventScreenPreview() {
 }
 
 @Composable
-fun EventDetails(event: Event) {
+fun EventDetails(event: Event, navController: NavController) {
+    val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("smarty", Context.MODE_PRIVATE)
+
+    var dialogOpen by remember {
+        mutableStateOf(false)
+    }
+
+    if(dialogOpen) {
+        AlertDialog(
+            onDismissRequest = { dialogOpen = false },
+            title = {
+                Text(text = "Are you sure you want to delete this event?")
+            },
+            confirmButton = {
+                Button(onClick = {
+                    sharedPreferences.edit()
+                        .remove(event.date)
+                        .apply()
+                    Toast.makeText(context, "Event deleted", Toast.LENGTH_SHORT).show()
+                    navController.popBackStack()
+                }) {
+                    Text(text = "YES")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { dialogOpen = false }) {
+                    Text(text = "NO")
+                }
+            }
+        )
+    }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -91,7 +123,9 @@ fun EventDetails(event: Event) {
             Text(text = "Reminder At")
             Text(text = event.time, fontSize = 30.sp, fontWeight = FontWeight.Bold)
         }
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = {
+            dialogOpen = true
+        }) {
             Text(text = "Delete Reminder", fontSize = 20.sp)
         }
     }
